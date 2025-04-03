@@ -1,5 +1,7 @@
 # PostcodeSearch
+
 📍 How to start the project: 
+
 💛 Step 1: Please pull initial structure file (from main)
 
 💙 Step 2: Each team member creates and works on their own branch. 
@@ -25,18 +27,7 @@ Folder Structure:
   /MinHeap
   /benchmark
 /inputFiles
-/output
+/output   
 README.md
-
-From spec, it mentioned that: 
-Provide a simple terminal-based options menu user interface that allows users to:
-• count the number of postcodes in the list,
-• check if a postcode is in the list,
-• add a postcode to the list,
-• delete a postcode from the list,
-• output all the postcodes into a text file 1/line in alphabetical order.
-
-⁉️should we create the interface and have the method for each action so, that every searches can implement??
-  /interfaces/PostcodeManager.java
 
 
