@@ -1,0 +1,187 @@
+// helper class with AVL tree logic
+// AVL nodes
+// insertion and rebalancing
+// deletion
+// rotations (LL, RR, LR, RL)
+// search
+// in-order traversal
+
+package AVL;
+
+import java.util.ArrayList;
+import java.util.List;
+
+class AVLNode {
+    String postcode; // the postcode being stored
+    int height; // to check if the part of the tree is unbalanced
+    AVLNode left;
+    AVLNode right; // links to child nodes
+
+    AVLNode(String data) {
+        this.postcode = postcode; // save the postcode
+        this.height = 1; // new node has no children
+        this.left = null;
+        this.right = null;
+    }
+}
+
+public class AVLTree {
+    private AVLNode root; // top of the tree
+
+    // constructor to create an empty tree
+    public AVLTree() {
+        root = null; // create an empty tree; placeholder for future tree
+    }
+
+    // insert method
+    public void insert(String postcode) {
+        System.out.println("Inserting postcode: " + postcode); // print what is being added
+        root = insert(root, postcode); // pass root and postcode
+    }
+
+    // recusrive insert
+    private AVLNode insert(AVLNode node, String postcode) {
+        if (node == null) {
+            return new AVLNode(postcode);
+        }
+
+        if (postcode.compareTo(node.postcode) < 0) {
+            node.left = insert(node.left, postcode);
+        } else if (postcode.compareTo(node.postcode) > 0) {
+            node.right = insert(node.right, postcode);
+        } else {
+            return node;
+        }
+
+        // update height
+        node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
+
+        // balancing factor
+        int balance = getBalance(node);
+
+        // perform rotations for unbalanced tree
+
+        // Left Left case
+        if (balance > 1 && postcode.compareTo(node.left.postcode) < 0) {
+            return rotateRight(node);
+        }
+
+        // Right Right Case
+        if (balance < -1 && postcode.compareTo(node.right.postcode) > 0) {
+            return rotateLeft(node);
+        }
+
+        // Left Right Case
+        if (balance > 1 && postcode.compareTo(node.left.postcode) > 0) {
+            node.left = rotateLeft(node.left);
+            return rotateRight(node);
+        }
+
+        // Right Left Case
+        if (balance < -1 && postcode.compareTo(node.right.postcode) < 0) {
+            node.right = rotateRight(node.right);
+            return rotateLeft(node);
+        }
+
+        return node; // no rotation needed
+    }
+
+    // getHeight of the node
+    // ask the node: how tall are you?
+    private int getHeight(AVLNode node) {
+        if (node == null) {
+            return 0; // if the node does not exist, its height is 0
+        } else {
+            return node.height; // otherwise give back the node's height
+        }
+    }
+
+    // getBalance factor (left height - right height)
+    private int getBalance(AVLNode node) {
+        if (node == null) { // if the node is empty, the balance is 0 (not leaning)
+            return 0;
+        } else {
+            int leftHeight = getHeight(node.left);
+            int rightHeight = getHeight(node.right);
+            return leftHeight - rightHeight; // if both nodes exist, check how tall the left and right sides are,
+                                             // substract them to see if the tree is leaning
+            // if left is taller - positive result +2
+            // if right is taller - negative result -2
+            // if both are the same - 0 (balanced)
+        }
+    }
+
+    // rotateRight (for LL and LR cases)
+    private AVLNode rotateRight(AVLNode y) {
+        AVLNode x = y.left;
+        AVLNode T2 = x.right; // T2 means Temporay Tree piece to be saved duting the rotation
+
+        // rotation
+        x.right = y;
+        y.left = T2;
+
+        // update height
+        y.height = 1 + Math.max(getHeight(y.left), getHeight(y.right));
+        x.height = 1 + Math.max(getHeight(x.left), getHeight(x.right));
+
+        return x; // new root after rotation
+    }
+
+    // rotate left (for RR and RL cases)
+    private AVLNode rotateLeft(AVLNode x) {
+        AVLNode y = x.right;
+        AVLNode T2 = y.left;
+
+        // rotation
+        y.left = x;
+        x.right = T2;
+
+        // update height
+        x.height = 1 + Math.max(getHeight(x.left), getHeight(x.right));
+        y.height = 1 + Math.max(getHeight(y.left), getHeight(y.right));
+
+        return y; // new root after rotation
+    }
+
+    // public search method to check for the postcode inside the tree (Is this
+    // postcode inside the tree?)
+    public boolean search(String postcode) {
+        System.out.println("Starting search for: " + postcode);
+        return search(root, postcode); // pass the request to the method
+    }
+
+    private boolean search(AVLNode node, String postcode) {
+        System.out.println("Checking node " + (node == null ? "null" : node.postcode));// ternary operator; if it is
+                                                                                       // null - print null;
+                                                                                       // else - print node.postcode
+        if (node == null) {
+            System.out.println("Postcode not found!");
+            return false;
+        }
+        if (postcode.equals(node.postcode)) {
+            System.out.println("Found postcode: " + postcode);
+            return true; // if the postcode at this node matches the one you are searching
+        } else if (postcode.compareTo(node.postcode) < 0) { // if your postcode is less than node's postcode - go left
+            return search(node.left, postcode);
+        } else { // if your postcode is greater - go right (e.g. in a dictionary - look first for
+                 // apple and after for zebra)
+            return search(node.right, postcode);
+        }
+    }
+
+    // public method to return the number of postcodes in the tree
+    public int count() {
+        System.out.println("Counting all postcodes in the tree...");
+        return count(root);
+    }
+
+    // private recursive counter
+    private int count(AVLNode node) {
+        if (node == null) {
+            return 0; // nothing to count
+        }
+        System.out.println("Counting node: " + node.postcode);
+        return 1 + count(node.left) + count(node.right); // root -> left -> right
+    }
+
+}

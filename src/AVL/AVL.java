@@ -1,3 +1,5 @@
+//main class implementation - implements the PostcodeManager interface 
+//calls methods from AVLTree
 package AVL;
 
 import java.util.List;
@@ -39,3 +41,4 @@ public class AVL implements PostcodeManager {
         throw new UnsupportedOperationException("Unimplemented method 'getAllPostcodes'");
     }
 }
+
