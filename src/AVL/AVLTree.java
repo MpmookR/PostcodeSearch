@@ -184,4 +184,33 @@ public class AVLTree {
         return 1 + count(node.left) + count(node.right); // root -> left -> right
     }
 
+    // In-Order Traversal (Left - Node - Right) - will return a sroted list of
+    // postcodes alphabetically
+    public String[] inOrder() {
+        System.out.println("Starting In-Order Traversal...");
+        List<String> result = new ArrayList<>(); // arrays cannot be expanded(fixed in size); turn into list first
+        inOrderTraversal(root, result);
+        System.out.println("In-Order Traversal Completed. Returning the sorted postcodes array");
+        return result.toArray(new String[0]); // convert list to String array (return the array of Strings with exact
+                                              // size of
+                                              // the list)
+                                              // String[0] means create a String array Java will automatically figure
+                                              // out the size
+    }
+
+    // helper method which adds the postcode to the same shared list
+    private void inOrderTraversal(AVLNode node, List<String> result) {
+        if (node != null) {
+            System.out.println("Go left from: " + node.postcode);
+            inOrderTraversal(node.left, result); // go left
+
+            System.out.println("Visit node: " + node.postcode);
+            result.add(node.postcode); // visit node; build the list, add the postcode result to the list
+
+            System.out.println("Go right from: " + node.postcode);
+            inOrderTraversal(node.right, result); // go right
+        } else {
+            System.out.println("Reached null branch, moving back up!");
+        }
+    }
 }
