@@ -11,6 +11,10 @@ package AVL;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 class AVLNode {
     String postcode; // the postcode being stored
     int height; // to check if the part of the tree is unbalanced
@@ -31,6 +35,28 @@ public class AVLTree {
     // constructor to create an empty tree
     public AVLTree() {
         root = null; // create an empty tree; placeholder for future tree
+    }
+
+    // load postcodes from a file and insert into the tree
+    public void loadFromFile(String filename) {
+        System.out.println("Loading postcodes from: " + filename);
+
+        // try with resources used when scanner needs to be closed
+        try (Scanner scanner = new Scanner(new File(filename))) { // closes scanner manually
+            int inserted = 0;
+
+            while (scanner.hasNextLine()) {
+                String postcode = scanner.nextLine(); // read each line from the file
+
+                if (!postcode.isEmpty()) {
+                    insert(postcode); // insert postcode to the tree
+                    inserted++; // count how many were added
+                }
+            }
+            System.out.println("Loaded " + inserted + "postcodes from " + filename);
+        } catch (FileNotFoundException e) {
+            System.out.println("Error! File not found - " + filename);
+        }
     }
 
     // insert method
@@ -213,4 +239,5 @@ public class AVLTree {
             System.out.println("Reached null branch, moving back up!");
         }
     }
+
 }
