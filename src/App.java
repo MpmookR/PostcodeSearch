@@ -3,7 +3,10 @@ import BST.BST;
 import AVL.AVL;
 import MinHeap.MinHeap;
 
+import Menu.AVLMenu;
+
 import java.util.Scanner;
+
 public class App {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
@@ -27,6 +30,9 @@ public class App {
                 case "2":
                     manager = new AVL();
                     System.out.println("Using AVL Tree...");
+                    // launch the AVL menu
+                    AVLMenu avlMenu = new AVLMenu((AVL) manager);
+                    avlMenu.showMenu();
                     break;
                 case "3":
                     manager = new MinHeap();
@@ -36,6 +42,6 @@ public class App {
                     System.out.println("Invalid option. Please try again.\n");
             }
         }
-        
+
     }
 }
