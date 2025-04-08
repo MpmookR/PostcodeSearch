@@ -42,10 +42,9 @@ public class AVL implements PostcodeManager {
         }
     }
 
-    @Override // needs to be done first TO DO
+    @Override
     public boolean delete(String postcode) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        return tree.delete(postcode);
     }
 
     @Override

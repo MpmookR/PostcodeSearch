@@ -240,4 +240,87 @@ public class AVLTree {
         }
     }
 
+    public boolean delete(String postcode) {
+        if (!search(postcode)) {
+            System.out.println("Postcode not found: " + postcode);
+            return false;
+        }
+
+        System.out.println("Deleting postcode: " + postcode);
+        AVLNode newRoot = delete(root, postcode); // delete node and get updated root
+        root = newRoot; // reassign root in case it changed after deletion
+        return true;
+    }
+
+    // recusrsive delete method
+    private AVLNode delete(AVLNode node, String postcode) {
+        if (node == null) {
+            System.out.println("Reached null branch. Nothing to delete!");
+            return null;
+        }
+        // treaverse the tree to find the right node
+        if (postcode.compareTo(node.postcode) < 0) {
+            System.out.println("Going left from: " + node.postcode);
+            node.left = delete(node.left, postcode);
+        } else if (postcode.compareTo(node.postcode) > 0) {
+            System.out.println("Going right from: " + node.postcode);
+            node.right = delete(node.right, postcode);
+        } else {
+            // found the node
+            System.out.println("Found node to delete: " + node.postcode);
+
+            if (node.left == null && node.right == null) {
+                return null; // node has no children
+
+            } else if (node.left == null) {
+                return node.right; // node has only right child
+            } else if (node.right == null) {
+                return node.left; // node only has left child
+
+            } else {
+                // node has 2 children
+                // find the smallest value in the right subtree(in-order successor)
+                AVLNode successor = findMin(node.right);
+                node.postcode = successor.postcode;
+                node.right = delete(node.right, successor.postcode);
+            }
+        }
+
+        // update height
+        node.height = 1 + Math.max(getHeight(node.left), getHeight(node.right));
+
+        // rebalance the tree
+        // check balance
+        int balance = getBalance(node);
+
+        // rotation cases; rebalance if needed
+        // LL case
+        if (balance > 1 && getBalance(node.left) >= 0) {
+            return rotateRight(node);
+        }
+        // LR case
+        if (balance > 1 && getBalance(node.left) < 0) {
+            node.left = rotateLeft(node.left);
+            return rotateRight(node);
+        }
+        // RR case
+        if (balance < -1 && getBalance(node.right) <= 0) {
+            return rotateLeft(node);
+        }
+        // RL case
+        if (balance < -1 && getBalance(node.right) > 0) {
+            node.right = rotateRight(node.right);
+            return rotateLeft(node);
+        }
+        return node; // return current node after deletion and rebalancing
+    }
+
+    // helper method to find smallest value in a subtree
+    private AVLNode findMin(AVLNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+
 }
