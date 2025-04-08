@@ -71,7 +71,7 @@ public class AVLMenu {
                             System.out.println("Invalid choice. Returning to main menu!");
                             continue;
                     }
-
+                    avl.getTree().clear(); // clear the tree before adding a new file
                     avl.getTree().loadFromFile("inputFiles/" + filename);
                     break;
 

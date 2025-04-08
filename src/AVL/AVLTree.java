@@ -22,7 +22,7 @@ class AVLNode {
     AVLNode right; // links to child nodes
 
     AVLNode(String data) {
-        this.postcode = postcode; // save the postcode
+        this.postcode = data; // save the postcode
         this.height = 1; // new node has no children
         this.left = null;
         this.right = null;
@@ -48,12 +48,12 @@ public class AVLTree {
             while (scanner.hasNextLine()) {
                 String postcode = scanner.nextLine(); // read each line from the file
 
-                if (!postcode.isEmpty()) {
+                if (postcode != null && !postcode.isEmpty()) {
                     insert(postcode); // insert postcode to the tree
                     inserted++; // count how many were added
                 }
             }
-            System.out.println("Loaded " + inserted + "postcodes from " + filename);
+            System.out.println("Loaded " + inserted + " postcodes from " + filename);
         } catch (FileNotFoundException e) {
             System.out.println("Error! File not found - " + filename);
         }
@@ -265,8 +265,10 @@ public class AVLTree {
         } else if (postcode.compareTo(node.postcode) > 0) {
             System.out.println("Going right from: " + node.postcode);
             node.right = delete(node.right, postcode);
+
+            // when comparison =0 e.g. "N1 2AB".compareTo("N1 2AB")→zero = postcode found
         } else {
-            // found the node
+            // found the node => proceed to deletion
             System.out.println("Found node to delete: " + node.postcode);
 
             if (node.left == null && node.right == null) {
@@ -321,6 +323,12 @@ public class AVLTree {
             node = node.left;
         }
         return node;
+    }
+
+    // avoid the filles adding one to another in the output
+    public void clear() {
+        root = null;
+        System.out.println("AVL Tree has been cleared!");
     }
 
 }
