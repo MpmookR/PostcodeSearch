@@ -28,11 +28,12 @@ public class App {
                     System.out.println("Using Binary Search Tree...");
                     break;
                 case "2":
-                    manager = new AVL();
+                    manager = new AVL(); // set AVL
                     System.out.println("Using AVL Tree...");
                     // launch the AVL menu
                     AVLMenu avlMenu = new AVLMenu((AVL) manager);
-                    avlMenu.showMenu();
+                    avlMenu.showMenu(); // user goes through the AVL options
+                    manager = null; // reset to go back to the selection of data structure
                     break;
                 case "3":
                     manager = new MinHeap();

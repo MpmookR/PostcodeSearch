@@ -55,6 +55,7 @@ public class AVL implements PostcodeManager {
         return getAllPostcodes("AVL_Output.txt");
     }
 
+    // overloadded version to allow custom filenames
     public List<String> getAllPostcodes(String outputFilename) {
         String[] postcodes = tree.inOrder(); // call the inOrder() method from AVLTree class
 
