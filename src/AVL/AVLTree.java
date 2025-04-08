@@ -325,7 +325,8 @@ public class AVLTree {
         return node;
     }
 
-    // avoid the filles adding one to another in the output
+    // avoid the files adding one to another in the output (avoid postcodes files
+    // combining; allow to switch)
     public void clear() {
         root = null;
         System.out.println("AVL Tree has been cleared!");
