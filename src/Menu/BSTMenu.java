@@ -1,5 +1,7 @@
 package Menu;
 
+//Terminal- based menu interface
+
 import java.util.Scanner;
 import BST.BST;
 
@@ -64,10 +66,15 @@ public class BSTMenu {
                             System.out.println("Invalid file choice");
                             continue;
                     }
+                    bst.getTree().clear(); // clears tree before adding new file
+                    bst.getTree().loadFromFile("input files/" + filename);
+                    
+                    // count postcodes
                 case "2":
                     System.out.println("Total postcodes in BST: " + bst.count());
                     break;
 
+                    // add postcode to the tree
                 case "3":
                     System.out.println("Enter postcode to add: ");
                     String addPostcode = scanner.nextLine().trim();
@@ -78,6 +85,7 @@ public class BSTMenu {
                     }
                     break;
 
+                    // delete postcode
                 case "4":
                     System.out.println("Enter postcode to delete: ");
                     String deletePostcode = scanner.nextLine().trim();
@@ -88,6 +96,7 @@ public class BSTMenu {
                     }
                     break;
 
+                    // search for a postcode
                 case "5":
                     System.out.println("Enter postcode to search: ");
                     String searchPostcode = scanner.nextLine().trim();
@@ -99,16 +108,18 @@ public class BSTMenu {
                     }
                     break;
 
+                    // output sorted to a default file
                 case "6":
-                   bst.saveToFile(); // saves to default file like "BST_Output.txt"
+                   bst.getAllPostcodes(); // saves to default file like "BST_Output.txt"
                    break;
 
                case "7":
-                    System.out.println("Enter filename to save to: ");
-                    String outFile = scanner.nextLine().trim();
-                    bst.saveToFile(outFile);
+                    System.out.println("Enter filename to save sorted postcodes to: ");
+                    String outputFilename = scanner.nextLine();
+                    bst.getAllPostcodes(outputFilename);
                     break;
 
+                    //exit
                 case "8":
                     System.out.println("Exiting BST menu...Goodbye!");
                     exit = true;
