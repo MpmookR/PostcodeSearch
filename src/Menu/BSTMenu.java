@@ -23,7 +23,7 @@ public class BSTMenu {
             System.out.println("2. Count postcodes");
             System.out.println("3. Add a postcode");
             System.out.println("4. Delete a postcode");
-            System.out.println("5. Searcg for a postcode");
+            System.out.println("5. Search for a postcode");
             System.out.println("6. Output sorted postcodes to default file (BST_Output.txt)");
             System.out.println("7. Output sorted postcodes to a custom file");
             System.out.println("8. Exit");
@@ -66,8 +66,10 @@ public class BSTMenu {
                             System.out.println("Invalid file choice");
                             continue;
                     }
-                    bst.getTree().clear(); // clears tree before adding new file
-                    bst.getTree().loadFromFile("input files/" + filename);
+
+                    bst.clear(); // clears tree before adding new file
+                    bst.loadFromFile("inputFiles/" + filename);
+                    break;
                     
                     // count postcodes
                 case "2":
@@ -123,6 +125,7 @@ public class BSTMenu {
                 case "8":
                     System.out.println("Exiting BST menu...Goodbye!");
                     exit = true;
+                    break;
                 default:
                     System.out.println("Invalid option. Try again.");
 

@@ -4,6 +4,7 @@ import AVL.AVL;
 import MinHeap.MinHeap;
 
 import Menu.AVLMenu;
+import Menu.BSTMenu;
 
 import java.util.Scanner;
 
@@ -18,6 +19,7 @@ public class App {
             System.out.println("1. Binary Search Tree (BST)");
             System.out.println("2. AVL Tree");
             System.out.println("3. Min Heap");
+            System.out.println("4. Exit");
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine();
@@ -26,6 +28,10 @@ public class App {
                 case "1":
                     manager = new BST();
                     System.out.println("Using Binary Search Tree...");
+                    // launch the BST menu
+                    BSTMenu bstMenu = new BSTMenu((BST) manager);
+                    bstMenu.showMenu(); // user is shown BST option
+                    manager = null; // reset to go back to select a different data structure.
                     break;
                 case "2":
                     manager = new AVL(); // set AVL
@@ -39,6 +45,11 @@ public class App {
                     manager = new MinHeap();
                     System.out.println("Using Min Heap...");
                     break;
+                case "4":
+                    System.out.println("Exiting application. Goodbye!");
+                    System.exit(0);
+                    break;
+
                 default:
                     System.out.println("Invalid option. Please try again.\n");
             }
