@@ -2,25 +2,23 @@ package interfaces;
 
 import java.util.List;
 
-// Common interface for postcode data structures
-
 public interface PostcodeManager {
-    //count the number of postcodes in the list
-    int count (); 
+    // Count the number of postcodes
+    int count();
 
-    //check if a postcode is in the list
-    boolean contains(String postcode);
+    // Search if a postcode exists
+    boolean search(String postcode);
 
-    //add a postcode to the list
-    boolean add(String postcode);
+    // Insert a postcode
+    boolean insert(String postcode);
 
-    //delete a postcode from the list
+    // Delete a postcode
     boolean delete(String postcode);
 
-    //output all the postcodes into a text file
+    // Return all postcodes in alphabetical order
     List<String> getAllPostcodes();
-
 }
+
 
 // defines the basic operations 
 // 1. count the number of postcodes in the list,

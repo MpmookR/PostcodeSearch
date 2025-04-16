@@ -1,14 +1,13 @@
-import interfaces.PostcodeManager;
-import BST.BST;
 import AVL.AVL;
-import MinHeap.MinHeap;
-
+import BST.BST;
 import Menu.AVLMenu;
-
+import Menu.MinHeapMenu;
+import MinHeap.MinHeap;
+import interfaces.PostcodeManager;
 import java.util.Scanner;
 
 public class App {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         PostcodeManager manager = null;
 
@@ -26,23 +25,25 @@ public class App {
                 case "1":
                     manager = new BST();
                     System.out.println("Using Binary Search Tree...");
+                    // Optional: Launch a menu if you have one for BST
                     break;
                 case "2":
-                    manager = new AVL(); // set AVL
+                    manager = new AVL();
                     System.out.println("Using AVL Tree...");
-                    // launch the AVL menu
                     AVLMenu avlMenu = new AVLMenu((AVL) manager);
-                    avlMenu.showMenu(); // user goes through the AVL options
-                    manager = null; // reset to go back to the selection of data structure
+                    avlMenu.showMenu();
+                    manager = null; // Reset to allow re-selection
                     break;
-                case "3":
-                    manager = new MinHeap();
+                    
+                    case "3":
+                    MinHeap heap = new MinHeap(1000); 
                     System.out.println("Using Min Heap...");
+                    MinHeapMenu heapMenu = new MinHeapMenu(heap);
+                    heapMenu.showMenu();
+                    manager = null; // Reset like AVL
                     break;
-                default:
-                    System.out.println("Invalid option. Please try again.\n");
+                
             }
         }
-
     }
 }
