@@ -5,15 +5,16 @@ import MinHeap.MinHeap;
 
 import Menu.AVLMenu;
 import Menu.BSTMenu;
+import Menu.MinHeapMenu;
 
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        PostcodeManager manager = null;
+        boolean running = true;
 
-        while (manager == null) {
+        while (running) {
             System.out.println("=== Welcome to the London Postcode Application ===");
             System.out.println("Please select the data structure you want to use:");
             System.out.println("1. Binary Search Tree (BST)");
@@ -22,6 +23,7 @@ public class App {
             System.out.print("Enter your choice: ");
 
             String choice = scanner.nextLine();
+            PostcodeManager manager = null;
 
             switch (choice) {
                 case "1":
@@ -40,14 +42,23 @@ public class App {
                     avlMenu.showMenu(); // user goes through the AVL options
                     manager = null; // reset to go back to the selection of data structure
                     break;
+
                 case "3":
-                    manager = new MinHeap();
+                    manager = new MinHeap(2000); // adjust size if needed
                     System.out.println("Using Min Heap...");
+                    MinHeapMenu heapMenu = new MinHeapMenu((MinHeap) manager);
+                    heapMenu.showMenu();
                     break;
+
+                case "4":
+                    System.out.println("Exiting application. Goodbye!");
+                    running = false;
+                    break;
+
                 default:
-                    System.out.println("Invalid option. Please try again.\n");
+                    System.out.println("Invalid option. Please try again.");
             }
         }
-
+        scanner.close();
     }
 }
