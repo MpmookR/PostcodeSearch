@@ -35,7 +35,7 @@ public class MinHeap implements PostcodeManager {
     @Override
     public boolean insert(String postcode) {
         if (postcode == null || size >= capacity) return false;
-        if (search(postcode)) return false; // Duplicate check
+        if (search(postcode)) return false; // Prevent duplicates
 
         heap[size] = postcode;
         siftUp(size);
@@ -46,12 +46,12 @@ public class MinHeap implements PostcodeManager {
     @Override
     public boolean delete(String postcode) {
         if (postcode == null) return false;
-        
+
         for (int i = 0; i < size; i++) {
             if (postcode.equals(heap[i])) {
-                heap[i] = heap[size - 1]; // Move last element to deleted position
+                heap[i] = heap[size - 1]; // Replace with last
                 size--;
-                siftDown(i);
+                siftDown(i); // Rebalance
                 return true;
             }
         }
@@ -60,7 +60,6 @@ public class MinHeap implements PostcodeManager {
 
     @Override
     public List<String> getAllPostcodes() {
-        // Alternative implementation that doesn't modify the heap:
         String[] copy = Arrays.copyOf(heap, size);
         Arrays.sort(copy);
         return Arrays.asList(copy);
@@ -68,7 +67,7 @@ public class MinHeap implements PostcodeManager {
 
     public String extractMinimum() {
         if (size == 0) return null;
-        
+
         String min = heap[0];
         heap[0] = heap[size - 1];
         size--;
@@ -76,11 +75,11 @@ public class MinHeap implements PostcodeManager {
         return min;
     }
 
-    // ---------- Helper Methods ----------
-    
+    // ---------- Private Helper Methods ----------
+
     private void siftUp(int i) {
         if (i < 0 || i >= size) return;
-        
+
         while (i > 0) {
             int parent = (i - 1) / 2;
             if (heap[i].compareTo(heap[parent]) < 0) {
@@ -94,7 +93,7 @@ public class MinHeap implements PostcodeManager {
 
     private void siftDown(int i) {
         if (i < 0 || i >= size) return;
-        
+
         while (true) {
             int left = 2 * i + 1;
             int right = 2 * i + 2;

@@ -9,41 +9,46 @@ import java.util.Scanner;
 public class App {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        PostcodeManager manager = null;
+        boolean running = true;
 
-        while (manager == null) {
-            System.out.println("=== Welcome to the London Postcode Application ===");
+        while (running) {
+            System.out.println("\n=== Welcome to the London Postcode Application ===");
             System.out.println("Please select the data structure you want to use:");
             System.out.println("1. Binary Search Tree (BST)");
             System.out.println("2. AVL Tree");
             System.out.println("3. Min Heap");
+            System.out.println("4. Exit");
             System.out.print("Enter your choice: ");
 
-            String choice = scanner.nextLine();
+            String choice = scanner.nextLine().trim();
 
             switch (choice) {
-                case "1":
-                    manager = new BST();
+                case "1" -> {
                     System.out.println("Using Binary Search Tree...");
-                    // Optional: Launch a menu if you have one for BST
-                    break;
-                case "2":
-                    manager = new AVL();
+                    PostcodeManager bst = new BST();
+                    // Optional: Add BSTMenu if available
+                    System.out.println("BST selected — feature not implemented yet.");
+                }
+                case "2" -> {
                     System.out.println("Using AVL Tree...");
-                    AVLMenu avlMenu = new AVLMenu((AVL) manager);
+                    AVL avl = new AVL();
+                    AVLMenu avlMenu = new AVLMenu(avl);
                     avlMenu.showMenu();
-                    manager = null; // Reset to allow re-selection
-                    break;
-                    
-                    case "3":
-                    MinHeap heap = new MinHeap(1000); 
+                }
+                case "3" -> {
                     System.out.println("Using Min Heap...");
+                    MinHeap heap = new MinHeap(2000); // or adjust to your input file size
                     MinHeapMenu heapMenu = new MinHeapMenu(heap);
                     heapMenu.showMenu();
-                    manager = null; // Reset like AVL
-                    break;
-                
+                }
+                case "4" -> {
+                    System.out.println("Exiting application. Goodbye!");
+                    running = false;
+                }
+                default -> System.out.println("Invalid choice. Please try again.");
             }
         }
+
+        scanner.close();
     }
 }
