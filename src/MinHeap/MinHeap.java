@@ -1,19 +1,19 @@
 package MinHeap;
 
 import interfaces.PostcodeManager;
-import java.util.Arrays;
 import java.util.List;
 
 public class MinHeap implements PostcodeManager {
     private String[] heap;
     private int size;
-    private final int capacity;
+    public final int capacity;
 
     public MinHeap(int maxSize) {
         if (maxSize <= 0) throw new IllegalArgumentException("Capacity must be positive");
         this.capacity = maxSize;
         this.heap = new String[capacity];
         this.size = 0;
+        System.out.println("Hello! I am a MinHeap");
     }
 
     @Override
@@ -60,9 +60,7 @@ public class MinHeap implements PostcodeManager {
 
     @Override
     public List<String> getAllPostcodes() {
-        String[] copy = Arrays.copyOf(heap, size);
-        Arrays.sort(copy);
-        return Arrays.asList(copy);
+        return List.of(inOrder());
     }
 
     public String extractMinimum() {
@@ -75,7 +73,25 @@ public class MinHeap implements PostcodeManager {
         return min;
     }
 
-    // ---------- Private Helper Methods ----------
+    /**
+     * Returns all postcodes in ascending (alphabetical) order.
+     * This method does NOT modify the original heap.
+     */
+    public String[] inOrder() {
+        MinHeap tempHeap = new MinHeap(capacity);
+        for (int i = 0; i < size; i++) {
+            tempHeap.insert(heap[i]);
+        }
+
+        String[] result = new String[tempHeap.size];
+        int i = 0;
+        while (tempHeap.count() > 0) {
+            result[i++] = tempHeap.extractMinimum();
+        }
+        return result;
+    }
+
+    // ---------- Helper Methods ----------
 
     private void siftUp(int i) {
         if (i < 0 || i >= size) return;
