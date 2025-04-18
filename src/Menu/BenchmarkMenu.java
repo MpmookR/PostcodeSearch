@@ -1,11 +1,13 @@
+// This class handles user interaction via console menu for benchmarking
+// It delegates logic and execution to BenchmarkService and BenchmarkUtils.
 package Menu;
 
-import BST.BST;
 import AVL.AVL;
+import BST.BST;
 import MinHeap.MinHeap;
-import interfaces.PostcodeManager;
-import benchmark.Benchmark;
+import benchmark.BenchmarkService;
 import benchmark.BenchmarkUtils;
+import interfaces.PostcodeManager;
 
 import java.util.*;
 
@@ -13,7 +15,6 @@ public class BenchmarkMenu {
 
     private final Scanner scanner = new Scanner(System.in);
     private List<String> postcodes = new ArrayList<>();
-    private List<String> searchSample = new ArrayList<>();
     private PostcodeManager structure;
     private String structureName = "None";
     private String loadedFilename = "None";
@@ -23,6 +24,34 @@ public class BenchmarkMenu {
 
         while (!exit) {
             System.out.println("\n=== Benchmarking Menu ===");
+            System.out.println("1. Run full benchmark across all files & structures");
+            System.out.println("2. Run benchmark on selected file and structure");
+            System.out.println("3. Exit");
+            System.out.print("Choose an option: ");
+
+            String choice = scanner.nextLine().trim();
+
+            switch (choice) {
+                case "1":
+                    runFullBenchmarkAll();
+                    break;
+                case "2":
+                    runSelectedBenchmark();
+                    break;
+                case "3":
+                    System.out.println("Exiting benchmarking menu...");
+                    exit = true;
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+        }
+    }
+
+    private void runSelectedBenchmark() {
+        boolean back = false;
+        while (!back) {
+            System.out.println("\n--- Benchmark on Selected File and Structure ---");
             System.out.println("Current file: " + loadedFilename);
             System.out.println("Current structure: " + structureName);
             System.out.println("-----------------------------------------------");
@@ -30,12 +59,13 @@ public class BenchmarkMenu {
             System.out.println("2. Choose structure to test (BST, AVL, MinHeap)");
             System.out.println("3. Run insert benchmark");
             System.out.println("4. Run search benchmark");
-            System.out.println("5. Exit");
+            System.out.println("5. Run delete benchmark");
+            System.out.println("6. Back to main menu");
             System.out.print("Choose an option: ");
 
-            String choice = scanner.nextLine().trim();
+            String subChoice = scanner.nextLine().trim();
 
-            switch (choice) {
+            switch (subChoice) {
                 case "1":
                     loadPostcodeFile();
                     break;
@@ -49,8 +79,10 @@ public class BenchmarkMenu {
                     runSearchBenchmark();
                     break;
                 case "5":
-                    System.out.println("Exiting benchmarking menu...");
-                    exit = true;
+                    runDeleteBenchmark();
+                    break;
+                case "6":
+                    back = true;
                     break;
                 default:
                     System.out.println("Invalid option. Please try again.");
@@ -59,13 +91,6 @@ public class BenchmarkMenu {
     }
 
     private void loadPostcodeFile() {
-        System.out.println("Select a postcode file to load:");
-        System.out.println("1. 1000_London_Postcodes.txt");
-        System.out.println("2. 2000_London_Postcodes.txt");
-        System.out.println("3. 4000_London_Postcodes.txt");
-        System.out.println("4. 8000_London_Postcodes.txt");
-        System.out.println("5. 16000_London_Postcodes.txt");
-
         String[] files = {
                 "1000_London_Postcodes.txt",
                 "2000_London_Postcodes.txt",
@@ -74,16 +99,18 @@ public class BenchmarkMenu {
                 "16000_London_Postcodes.txt"
         };
 
+        System.out.println("Select a postcode file to load:");
+        for (int i = 0; i < files.length; i++) {
+            System.out.printf("%d. %s\n", i + 1, files[i]);
+        }
         System.out.print("Enter your choice: ");
-        String input = scanner.nextLine().trim();
 
         try {
-            int index = Integer.parseInt(input) - 1;
+            int index = Integer.parseInt(scanner.nextLine().trim()) - 1;
             if (index >= 0 && index < files.length) {
                 loadedFilename = files[index];
                 postcodes = BenchmarkUtils.loadPostcodes("inputFiles/" + loadedFilename);
-                searchSample = BenchmarkUtils.getSample(postcodes, 100);
-                System.out.println("Loaded " + postcodes.size() + " postcodes.");
+                System.out.println("Loaded " + postcodes.size() + " postcodes from " + loadedFilename);
             } else {
                 System.out.println("Invalid file choice.");
             }
@@ -98,9 +125,8 @@ public class BenchmarkMenu {
         System.out.println("2. AVL");
         System.out.println("3. MinHeap");
         System.out.print("Enter your choice: ");
-        String input = scanner.nextLine().trim();
 
-        switch (input) {
+        switch (scanner.nextLine().trim()) {
             case "1":
                 structure = new BST();
                 structureName = "BST";
@@ -111,7 +137,7 @@ public class BenchmarkMenu {
                 break;
             case "3":
                 if (postcodes.isEmpty()) {
-                    System.out.println("Please load a postcode file first — MinHeap needs to know how big to be.");
+                    System.out.println("Please load a postcode file first — MinHeap needs to know the size.");
                     return;
                 }
                 structure = new MinHeap(postcodes.size());
@@ -129,21 +155,50 @@ public class BenchmarkMenu {
     }
 
     private void runInsertBenchmark() {
-        if (!checkReady())
-            return;
+        if (!checkReady()) return;
 
-        long time = Benchmark.timeInsert(structure, postcodes);
-        System.out.println("Insert Benchmark (" + structureName + ", " + loadedFilename + "): " + time + " ms");
+        long time = BenchmarkService.runInsert(structure, postcodes);
+        System.out.println("\n=============================================================");
+        System.out.println("Insert Benchmark for " + structureName);
+        System.out.println("File: " + loadedFilename + " | Size: " + postcodes.size());
+        System.out.println("-------------------------------------------------------------");
+        System.out.printf("Time taken: %d ms%n", time);
+        System.out.println("=============================================================");
     }
 
     private void runSearchBenchmark() {
-        if (!checkReady())
-            return;
+        if (!checkReady()) return;
 
-        long time = Benchmark.timeSearch(structure, searchSample);
-        System.out.println("Search Benchmark (" + structureName + ", 100 samples): " + time + " ms");
+        long time = BenchmarkService.runSearch(structure, postcodes);
+        System.out.println("\n=============================================================");
+        System.out.println("Search Benchmark for " + structureName);
+        System.out.println("File: " + loadedFilename + " | Size: " + postcodes.size());
+        System.out.println("-------------------------------------------------------------");
+        System.out.printf("Time taken: %d ms%n", time);
+        System.out.println("=============================================================");
     }
 
+    private void runDeleteBenchmark() {
+        if (!checkReady()) return;
+
+        long time = BenchmarkService.runDelete(structure, postcodes);
+        System.out.println("\n=============================================================");
+        System.out.println("Delete Benchmark for " + structureName);
+        System.out.println("File: " + loadedFilename + " | Size: " + postcodes.size());
+        System.out.println("-------------------------------------------------------------");
+        System.out.printf("Time taken: %d ms%n", time);
+        System.out.println("=============================================================");
+    }
+
+    private void runFullBenchmarkAll() {
+        try {
+            BenchmarkService.runFullBenchmarkAcrossFiles();
+        } catch (Exception e) {
+            System.out.println("Failed to run full benchmark: " + e.getMessage());
+        }
+    }
+
+    // Validation helper before running benchmarks
     private boolean checkReady() {
         if (postcodes.isEmpty()) {
             System.out.println("Please load a postcode file first.");
