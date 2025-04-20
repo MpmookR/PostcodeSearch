@@ -4,6 +4,14 @@ import interfaces.PostcodeManager;
 import java.util.List;
 
 public class Benchmark {
+    
+    // Measures how long it takes to count the number of postcodes in the structure
+    public static long timeCount(PostcodeManager structure) {
+        long start = System.nanoTime();
+        structure.count();
+        long end = System.nanoTime();
+        return (end - start) / 1_000_000;
+    }
 
     //Measures how long it takes to insert a list of postcodes into the given structure
     public static long timeInsert(PostcodeManager structure, List<String> postcodes) {
@@ -32,6 +40,14 @@ public class Benchmark {
         for (String postcode : postcodes) {
             structure.delete(postcode); // Delete each postcode using the structure
         }
+        long end = System.nanoTime();
+        return (end - start) / 1_000_000;
+    }
+
+    // Measures how long it takes to return a sorted list using in-order traversal
+    public static long timeInOrder(PostcodeManager structure) {
+        long start = System.nanoTime();
+        structure.getAllPostcodes(); // This performs an in-order traversal internally
         long end = System.nanoTime();
         return (end - start) / 1_000_000;
     }

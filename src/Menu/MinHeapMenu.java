@@ -182,7 +182,7 @@ public class MinHeapMenu {
 
    private boolean heapLoaded() {
        if (heap == null) {
-           System.out.println("⚠ Please load a postcode file first.");
+           System.out.println("Please load a postcode file first.");
            return false;
        }
        return true;

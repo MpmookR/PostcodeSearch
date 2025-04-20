@@ -1,12 +1,9 @@
-// This class handles user interaction via console menu for benchmarking
-// It delegates logic and execution to BenchmarkService and BenchmarkUtils.
 package Menu;
 
 import AVL.AVL;
 import BST.BST;
 import MinHeap.MinHeap;
 import benchmark.BenchmarkService;
-import benchmark.BenchmarkUtils;
 import interfaces.PostcodeManager;
 
 import java.util.*;
@@ -60,11 +57,13 @@ public class BenchmarkMenu {
             System.out.println("3. Run insert benchmark");
             System.out.println("4. Run search benchmark");
             System.out.println("5. Run delete benchmark");
-            System.out.println("6. Back to main menu");
+            System.out.println("6. Run count benchmark");
+            System.out.println("7. Run in-order benchmark");
+            System.out.println("8. Back to main menu");
             System.out.print("Choose an option: ");
-
+    
             String subChoice = scanner.nextLine().trim();
-
+    
             switch (subChoice) {
                 case "1":
                     loadPostcodeFile();
@@ -82,12 +81,34 @@ public class BenchmarkMenu {
                     runDeleteBenchmark();
                     break;
                 case "6":
+                    runCountBenchmark();
+                    break;
+                case "7":
+                    runInOrderBenchmark();
+                    break;
+                case "8":
                     back = true;
                     break;
                 default:
                     System.out.println("Invalid option. Please try again.");
             }
         }
+    }
+    
+    private void runCountBenchmark() {
+        if (!checkReady()) return;
+    
+        long start = System.nanoTime();
+        int count = structure.count();
+        long end = System.nanoTime();
+    
+        System.out.println("\n=============================================================");
+        System.out.println("Count Benchmark for " + structureName);
+        System.out.println("File: " + loadedFilename);
+        System.out.println("-------------------------------------------------------------");
+        System.out.printf("Postcode Count: %d%n", count);
+        System.out.printf("Time taken: %d ms%n", (end - start) / 1_000_000);
+        System.out.println("=============================================================");
     }
 
     private void loadPostcodeFile() {
@@ -109,7 +130,7 @@ public class BenchmarkMenu {
             int index = Integer.parseInt(scanner.nextLine().trim()) - 1;
             if (index >= 0 && index < files.length) {
                 loadedFilename = files[index];
-                postcodes = BenchmarkUtils.loadPostcodes("inputFiles/" + loadedFilename);
+                postcodes = BenchmarkService.loadPostcodes("inputFiles/" + loadedFilename);
                 System.out.println("Loaded " + postcodes.size() + " postcodes from " + loadedFilename);
             } else {
                 System.out.println("Invalid file choice.");
@@ -187,6 +208,22 @@ public class BenchmarkMenu {
         System.out.println("File: " + loadedFilename + " | Size: " + postcodes.size());
         System.out.println("-------------------------------------------------------------");
         System.out.printf("Time taken: %d ms%n", time);
+        System.out.println("=============================================================");
+    }
+
+    private void runInOrderBenchmark() {
+        if (!checkReady()) return;
+    
+        long start = System.nanoTime();
+        List<String> sorted = structure.getAllPostcodes();
+        long end = System.nanoTime();
+    
+        System.out.println("\n=============================================================");
+        System.out.println("In-Order Benchmark for " + structureName);
+        System.out.println("File: " + loadedFilename);
+        System.out.println("-------------------------------------------------------------");
+        System.out.printf("Sorted postcodes retrieved: %d%n", sorted.size());
+        System.out.printf("Time taken: %d ms%n", (end - start) / 1_000_000);
         System.out.println("=============================================================");
     }
 
